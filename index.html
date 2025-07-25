@@ -16,7 +16,7 @@
 </head>
 
 <body class="min-h-screen p-6">
-    <div id="album-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+    <div id="album-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
 
     <script>
         const albums = [
@@ -28,79 +28,107 @@
             {
                 title: "I'm Done With Self Care, It's Time For Others' Harm",
                 artist: "Thus Spoke Zarathustra",
-                image: "https://i.scdn.co/image/ab67616d0000b273b7ec4c081a624f6fb86ba736"
+                image: "https://i.scdn.co/image/ab67616d0000b273b7ec4c081a624f6fb86ba736",
+                album: "https://open.spotify.com/album/2s49Avw876t7lHNa8jwZVD"
             },
             {
                 title: "SALVATION LAUGHS IN THE FACE OF A GRIEVING MOTHER",
                 artist: "PSYCHO-FRAME",
-                image: "https://i.scdn.co/image/ab67616d0000b2735d280a2f028bbc31fbba3b13"
+                image: "https://i.scdn.co/image/ab67616d0000b2735d280a2f028bbc31fbba3b13",
+                album: "https://open.spotify.com/album/0dHQH04nSGugSUSQOHOUpF"
             },
             {
                 title: "RESILIENCE.",
                 artist: "THROATCUT.",
-                image: "https://i.scdn.co/image/ab67616d0000b2737d888d0ee9077cbc5e5dd912"
+                image: "https://i.scdn.co/image/ab67616d0000b2737d888d0ee9077cbc5e5dd912",
+                album: "https://open.spotify.com/album/03c4L9QMq5T1GKOq2Fk4gc"
             },
             {
                 title: "Xenotaph",
                 artist: "Fallujah",
-                image: "https://i.scdn.co/image/ab67616d0000b273ed7f0f5552542036d5ab9a23"
+                image: "https://i.scdn.co/image/ab67616d0000b273ed7f0f5552542036d5ab9a23",
+                album: "https://open.spotify.com/album/1pbRzs1dkG6luTXoMNiZHs"
             },
             {
                 title: "A Door Left Open",
                 artist: "Orthodox",
-                image: "https://i.scdn.co/image/ab67616d00001e0270b021be09e6c7e591024b07"
+                image: "https://i.scdn.co/image/ab67616d00001e0270b021be09e6c7e591024b07",
+                album: "https://open.spotify.com/album/7blYE5dWcNhCfnKB8OH0ff"
             },
             {
                 title: "All The Devils Are Here",
                 artist: "Mugshot",
-                image: "https://i.scdn.co/image/ab67616d0000b2738ba6fc2a6706a78cae12a877"
+                image: "https://i.scdn.co/image/ab67616d0000b2738ba6fc2a6706a78cae12a877",
+                album: "https://open.spotify.com/album/6EaGIImIE0Nt9jBo4KOQQE"
             },
             {
                 title: "A Visage of a Mangled Body",
                 artist: "Killing of a Sacred Deer",
-                image: "https://i.scdn.co/image/ab67616d0000b273041aa9868a5fa9975c6139ad"
+                image: "https://i.scdn.co/image/ab67616d0000b273041aa9868a5fa9975c6139ad",
+                album: "https://open.spotify.com/album/4BjTAi0mnjdz2ejZYDzASF"
             },
             {
                 title: "L'Appel Du Vide",
                 artist: "Zeolite",
-                image: "https://i.scdn.co/image/ab67616d0000b273a6432bb4ee335104036b187f"
+                image: "https://i.scdn.co/image/ab67616d0000b273a6432bb4ee335104036b187f",
+                album: "https://open.spotify.com/album/0JoWaUqv8bugBwK2IguDK0"
             },
             {
                 title: "Imperium Delirium",
                 artist: "Shadow of Intent",
-                image: "https://i.scdn.co/image/ab67616d0000b273228f2504ad386535f913d638"
+                image: "https://i.scdn.co/image/ab67616d0000b273228f2504ad386535f913d638",
+                album: "https://open.spotify.com/album/73dNfnRABJZt3zIhEifUgv"
             },
             {
                 title: "Rivers of Nihil",
                 artist: "Rivers of Nihil",
-                image: "https://i.scdn.co/image/ab67616d0000b2739289be72c5a8dc201a01e02a"
+                image: "https://i.scdn.co/image/ab67616d0000b2739289be72c5a8dc201a01e02a",
+                album: "https://open.spotify.com/album/5qwj8HdGnmlctKKAzbbi9m"
             },
             {
                 title: "+ där skogen sjunger under evighetens granar +",
                 artist: "Vildhjarta",
-                image: "https://i.scdn.co/image/ab67616d0000b2731b961ce520390d50de5a4297"
+                image: "https://i.scdn.co/image/ab67616d0000b2731b961ce520390d50de5a4297",
+                album: "https://open.spotify.com/album/509CFsKMmX9wl3xfOTdDsj"
             },
             {
                 title: "CODA",
                 artist: "NOVELISTS",
-                image: "https://i.scdn.co/image/ab67616d0000b2739c153c05f385b9e9ee4cd596"
+                image: "https://i.scdn.co/image/ab67616d0000b2739c153c05f385b9e9ee4cd596",
+                album: "https://open.spotify.com/album/1y3G3ozQ3CTRkBMi2N8QAn"
             },
             {
                 title: "Tsunami Sea",
                 artist: "Spiritbox",
-                image: "https://i.scdn.co/image/ab67616d0000b273ca5c3280d995a78c34bdf210"
+                image: "https://i.scdn.co/image/ab67616d0000b273ca5c3280d995a78c34bdf210",
+                album: "https://open.spotify.com/album/79sg58t1vRpcxudpP9uPtg"
+            },
+            {
+                title: "Euphoric End",
+                artist: "PALESKIN",
+                image: "https://i.scdn.co/image/ab67616d0000b2738f4b1840fe73cf0ff0086c7d",
+                album: "https://open.spotify.com/album/0HBpa7JkJMWd7cJgZFQHfN"
+
             }
+
         ];
+
+        const isMobile = /Mobi/.test(navigator.userAgent);
+        albums.sort((a, b) => a.title.localeCompare(b.title));
 
         const container = document.getElementById("album-grid");
 
         albums.forEach(album => {
             const card = document.createElement("div");
-            card.className = "rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-white";
+            card.className = "rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow bg-white";
+
+            const link = isMobile
+                ? album.spotify.replace("https://open.spotify.com/album/", "spotify://album/")
+                : album.spotify;
 
             card.innerHTML = `
         <div class="p-4">
-          <a href="#" class="block overflow-hidden rounded-xl">
+          <a href="${link}" target="_blank" class="block overflow-hidden rounded-xl">
             <img src="${album.image}" alt="Album Art" class="w-full object-cover rounded-xl" />
           </a>
           <div class="mt-4">
