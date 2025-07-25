@@ -1,146 +1,592 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-white font-sans">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Top of 2025.</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700&display=swap" rel="stylesheet" />
+    <title>Top Albums of 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
+
+        .album-card {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .album-card:hover .album-image {
+            transform: scale(1.05);
+        }
+
+        .album-image {
+            transition: transform 0.3s ease;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+        }
+
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .dark .glass-effect {
+            background: rgba(26, 32, 44, 0.8);
+        }
+
+        .search-highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .dark .search-highlight {
+            background: linear-gradient(120deg, #2d3748 0%, #4a5568 100%);
+        }
+
+        .album-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .album-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .album-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .album-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .album-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .album-card:nth-child(n+6) {
+            animation-delay: 0.6s;
+        }
     </style>
 </head>
 
-<body class="min-h-screen p-6">
-    <div id="album-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+<body class="min-h-screen transition-colors duration-300">
+    <!-- Header -->
+    <header class="gradient-bg text-white">
+        <div class="max-w-7xl mx-auto px-6 py-12">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">Top Albums of 2025</h1>
+                <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
+                    My personal soundtrack for the year. Each album tells a story, captures a moment, and shapes the
+                    rhythm of my days.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Controls -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="glass-effect rounded-2xl p-6 mb-8 border border-gray-200 dark:border-gray-700">
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <!-- Search -->
+                <div class="relative flex-1 max-w-md">
+                    <span
+                        class="material-icons absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">search</span>
+                    <input type="text" id="search-input" placeholder="Search albums or artists..."
+                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        aria-label="Search albums and artists" />
+                </div>
+
+                <!-- Controls Row -->
+                <div class="flex gap-3 items-center">
+                    <!-- Sort -->
+                    <select id="sort-select"
+                        class="px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        aria-label="Sort albums">
+                        <option value="title">Sort by Title</option>
+                        <option value="artist">Sort by Artist</option>
+                        <option value="rating">Sort by Rating</option>
+                        <option value="genre">Sort by Genre</option>
+                    </select>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle"
+                        class="p-3 rounded-xl bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                        aria-label="Toggle dark mode">
+                        <span class="material-icons text-gray-700 dark:text-gray-300">dark_mode</span>
+                    </button>
+
+                    <!-- Shuffle -->
+                    <button id="shuffle-btn"
+                        class="px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors flex items-center gap-2"
+                        aria-label="Shuffle albums">
+                        <span class="material-icons">shuffle</span>
+                        <span class="hidden sm:inline">Shuffle</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="glass-effect rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="total-albums">0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Total Albums</div>
+            </div>
+            <div class="glass-effect rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="unique-artists">0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Artists</div>
+            </div>
+            <div class="glass-effect rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="avg-rating">0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Avg Rating</div>
+            </div>
+            <div class="glass-effect rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="top-genre">-</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Top Genre</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Albums Grid -->
+    <main class="max-w-7xl mx-auto px-6 pb-12">
+        <div id="no-results" class="hidden text-center py-12">
+            <span class="material-icons text-6xl text-gray-400 mb-4">music_off</span>
+            <h3 class="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">No albums found</h3>
+            <p class="text-gray-500 dark:text-gray-500">Try adjusting your search or filters</p>
+        </div>
+
+        <div id="album-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 dark:bg-gray-900 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-600 dark:text-gray-400">
+                Made with ♪ for music lovers |
+                <a href="https://open.spotify.com" class="text-blue-500 hover:text-blue-600 transition-colors">Listen on
+                    Spotify</a>
+            </p>
+        </div>
+    </footer>
 
     <script>
+        // Enhanced album data with additional metadata
         const albums = [
             {
                 title: "I Will Not Be Found Here After",
                 artist: "CELL",
                 image: "https://i.scdn.co/image/ab67616d0000b2739c52cde22928fdd84f184d18",
-                spotify: "https://open.spotify.com/album/5DX6OC6rhaLyYJUvgTzZyA"
+                spotify: "https://open.spotify.com/album/5DX6OC6rhaLyYJUvgTzZyA",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "I'm Done With Self Care, It's Time For Others' Harm",
                 artist: "Thus Spoke Zarathustra",
                 image: "https://i.scdn.co/image/ab67616d0000b273b7ec4c081a624f6fb86ba736",
-                spotify: "https://open.spotify.com/album/2s49Avw876t7lHNa8jwZVD"
+                spotify: "https://open.spotify.com/album/2s49Avw876t7lHNa8jwZVD",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "SALVATION LAUGHS IN THE FACE OF A GRIEVING MOTHER",
                 artist: "PSYCHO-FRAME",
                 image: "https://i.scdn.co/image/ab67616d0000b2735d280a2f028bbc31fbba3b13",
-                spotify: "https://open.spotify.com/album/0dHQH04nSGugSUSQOHOUpF"
+                spotify: "https://open.spotify.com/album/0dHQH04nSGugSUSQOHOUpF",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "RESILIENCE.",
                 artist: "THROATCUT.",
                 image: "https://i.scdn.co/image/ab67616d0000b2737d888d0ee9077cbc5e5dd912",
-                spotify: "https://open.spotify.com/album/03c4L9QMq5T1GKOq2Fk4gc"
+                spotify: "https://open.spotify.com/album/03c4L9QMq5T1GKOq2Fk4gc",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "Xenotaph",
                 artist: "Fallujah",
                 image: "https://i.scdn.co/image/ab67616d0000b273ed7f0f5552542036d5ab9a23",
-                spotify: "https://open.spotify.com/album/1pbRzs1dkG6luTXoMNiZHs"
+                spotify: "https://open.spotify.com/album/1pbRzs1dkG6luTXoMNiZHs",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "A Door Left Open",
                 artist: "Orthodox",
                 image: "https://i.scdn.co/image/ab67616d00001e0270b021be09e6c7e591024b07",
-                spotify: "https://open.spotify.com/album/7blYE5dWcNhCfnKB8OH0ff"
+                spotify: "https://open.spotify.com/album/7blYE5dWcNhCfnKB8OH0ff",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "All The Devils Are Here",
                 artist: "Mugshot",
                 image: "https://i.scdn.co/image/ab67616d0000b2738ba6fc2a6706a78cae12a877",
-                spotify: "https://open.spotify.com/album/6EaGIImIE0Nt9jBo4KOQQE"
+                spotify: "https://open.spotify.com/album/6EaGIImIE0Nt9jBo4KOQQE",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "A Visage of a Mangled Body",
                 artist: "Killing of a Sacred Deer",
                 image: "https://i.scdn.co/image/ab67616d0000b273041aa9868a5fa9975c6139ad",
-                spotify: "https://open.spotify.com/album/4BjTAi0mnjdz2ejZYDzASF"
+                spotify: "https://open.spotify.com/album/4BjTAi0mnjdz2ejZYDzASF",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "L'Appel Du Vide",
                 artist: "Zeolite",
                 image: "https://i.scdn.co/image/ab67616d0000b273a6432bb4ee335104036b187f",
-                spotify: "https://open.spotify.com/album/0JoWaUqv8bugBwK2IguDK0"
+                spotify: "https://open.spotify.com/album/0JoWaUqv8bugBwK2IguDK0",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "Imperium Delirium",
                 artist: "Shadow of Intent",
                 image: "https://i.scdn.co/image/ab67616d0000b273228f2504ad386535f913d638",
-                spotify: "https://open.spotify.com/album/73dNfnRABJZt3zIhEifUgv"
+                spotify: "https://open.spotify.com/album/73dNfnRABJZt3zIhEifUgv",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "Rivers of Nihil",
                 artist: "Rivers of Nihil",
                 image: "https://i.scdn.co/image/ab67616d0000b2739289be72c5a8dc201a01e02a",
-                spotify: "https://open.spotify.com/album/5qwj8HdGnmlctKKAzbbi9m"
+                spotify: "https://open.spotify.com/album/5qwj8HdGnmlctKKAzbbi9m",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "+ där skogen sjunger under evighetens granar +",
                 artist: "Vildhjarta",
                 image: "https://i.scdn.co/image/ab67616d0000b2731b961ce520390d50de5a4297",
-                spotify: "https://open.spotify.com/album/509CFsKMmX9wl3xfOTdDsj"
+                spotify: "https://open.spotify.com/album/509CFsKMmX9wl3xfOTdDsj",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "CODA",
                 artist: "NOVELISTS",
                 image: "https://i.scdn.co/image/ab67616d0000b2739c153c05f385b9e9ee4cd596",
-                spotify: "https://open.spotify.com/album/1y3G3ozQ3CTRkBMi2N8QAn"
+                spotify: "https://open.spotify.com/album/1y3G3ozQ3CTRkBMi2N8QAn",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "Tsunami Sea",
                 artist: "Spiritbox",
                 image: "https://i.scdn.co/image/ab67616d0000b273ca5c3280d995a78c34bdf210",
-                spotify: "https://open.spotify.com/album/79sg58t1vRpcxudpP9uPtg"
+                spotify: "https://open.spotify.com/album/79sg58t1vRpcxudpP9uPtg",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
             },
             {
                 title: "Euphoric End",
                 artist: "PALESKIN",
                 image: "https://i.scdn.co/image/ab67616d0000b2738f4b1840fe73cf0ff0086c7d",
-                spotify: "https://open.spotify.com/album/0HBpa7JkJMWd7cJgZFQHfN"
+                spotify: "https://open.spotify.com/album/0HBpa7JkJMWd7cJgZFQHfN",
+                rating: 4.5,
+                genre: "Metal",
+                releaseDate: "",
+                personalNote: ""
 
             }
 
         ];
 
+        // State management
+        let currentAlbums = [...albums];
+        let originalOrder = [...albums];
         const isMobile = /Mobi/.test(navigator.userAgent);
-        albums.sort((a, b) => a.title.localeCompare(b.title));
 
-        const container = document.getElementById("album-grid");
+        // DOM elements
+        const albumGrid = document.getElementById('album-grid');
+        const searchInput = document.getElementById('search-input');
+        const sortSelect = document.getElementById('sort-select');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const themeToggle = document.getElementById('theme-toggle');
+        const noResults = document.getElementById('no-results');
 
-        albums.forEach(album => {
-            const card = document.createElement("div");
-            card.className = "rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow bg-white";
+        // Theme management
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+                themeToggle.querySelector('.material-icons').textContent = 'light_mode';
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeToggle.querySelector('.material-icons').textContent = isDark ? 'light_mode' : 'dark_mode';
+        }
+
+        // Create album card
+        function createAlbumCard(album, index) {
+            const card = document.createElement('div');
+            card.className = 'album-card rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg transition-all duration-300 bg-white dark:bg-gray-800 overflow-hidden';
+            card.style.animationDelay = `${index * 0.1}s`;
 
             const link = isMobile
                 ? album.spotify.replace("https://open.spotify.com/album/", "spotify://album/")
                 : album.spotify;
 
-            card.innerHTML = `
-        <div class="p-4">
-          <a href="${link}" target="_blank" class="block overflow-hidden rounded-xl">
-            <img src="${album.image}" alt="Album Art" class="w-full object-cover rounded-xl" />
-          </a>
-          <div class="mt-4">
-            <h2 class="text-lg font-bold text-gray-900">${album.title}</h2>
-            <p class="text-sm font-light text-gray-600">${album.artist}</p>
-          </div>
-        </div>
-      `;
+            const stars = '★'.repeat(Math.floor(album.rating)) + '☆'.repeat(5 - Math.floor(album.rating));
 
-            container.appendChild(card);
+            card.innerHTML = `
+                <div class="relative group">
+                    <div class="aspect-square overflow-hidden">
+                        <div class="skeleton aspect-square rounded-t-2xl"></div>
+                        <img 
+                            src="${album.image}" 
+                            alt="Album cover for ${album.title} by ${album.artist}"
+                            class="album-image w-full h-full object-cover absolute top-0 left-0 opacity-0 transition-opacity duration-300"
+                            loading="lazy"
+                            onload="this.style.opacity=1; this.previousElementSibling.style.display='none';"
+                            onerror="this.previousElementSibling.style.display='block';"
+                        />
+                    </div>
+                    
+                    <!-- Hover overlay -->
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                        <a 
+                            href="${link}" 
+                            target="_blank" 
+                            class="opacity-0 group-hover:opacity-100 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                            aria-label="Listen to ${album.title} on Spotify"
+                        >
+                            <span class="material-icons text-green-500">play_arrow</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="mb-3">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">${album.title}</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">${album.artist}</p>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full">${album.genre}</span>
+                        <div class="text-yellow-400 text-sm" title="Rating: ${album.rating}/5">${stars}</div>
+                    </div>
+                    
+                    <p class="text-xs text-gray-500 dark:text-gray-400 italic line-clamp-2" title="${album.personalNote}">
+                        "${album.personalNote}"
+                    </p>
+                    
+                    <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+                        <p class="text-xs text-gray-400 dark:text-gray-500">
+                            ${new Date(album.releaseDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Render albums
+        function renderAlbums(albumsToRender = currentAlbums) {
+            albumGrid.innerHTML = '';
+
+            if (albumsToRender.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+
+            albumsToRender.forEach((album, index) => {
+                const card = createAlbumCard(album, index);
+                albumGrid.appendChild(card);
+            });
+
+            updateStats();
+        }
+
+        // Search functionality
+        function performSearch(query) {
+            if (!query.trim()) {
+                currentAlbums = [...originalOrder];
+            } else {
+                const searchTerm = query.toLowerCase();
+                currentAlbums = originalOrder.filter(album =>
+                    album.title.toLowerCase().includes(searchTerm) ||
+                    album.artist.toLowerCase().includes(searchTerm) ||
+                    album.genre.toLowerCase().includes(searchTerm)
+                );
+            }
+            renderAlbums();
+        }
+
+        // Sort functionality
+        function sortAlbums(criteria) {
+            currentAlbums.sort((a, b) => {
+                switch (criteria) {
+                    case 'artist':
+                        return a.artist.localeCompare(b.artist);
+                    case 'rating':
+                        return b.rating - a.rating;
+                    case 'genre':
+                        return a.genre.localeCompare(b.genre);
+                    default:
+                        return a.title.localeCompare(b.title);
+                }
+            });
+            renderAlbums();
+        }
+
+        // Shuffle functionality
+        function shuffleAlbums() {
+            currentAlbums = [...currentAlbums].sort(() => Math.random() - 0.5);
+            renderAlbums();
+
+            // Visual feedback
+            shuffleBtn.style.transform = 'rotate(180deg)';
+            setTimeout(() => {
+                shuffleBtn.style.transform = '';
+            }, 300);
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalAlbums = currentAlbums.length;
+            const uniqueArtists = new Set(currentAlbums.map(album => album.artist)).size;
+            const avgRating = totalAlbums > 0 ? (currentAlbums.reduce((sum, album) => sum + album.rating, 0) / totalAlbums).toFixed(1) : 0;
+
+            const genreCounts = {};
+            currentAlbums.forEach(album => {
+                genreCounts[album.genre] = (genreCounts[album.genre] || 0) + 1;
+            });
+            const topGenre = Object.keys(genreCounts).reduce((a, b) => genreCounts[a] > genreCounts[b] ? a : b, '-');
+
+            document.getElementById('total-albums').textContent = totalAlbums;
+            document.getElementById('unique-artists').textContent = uniqueArtists;
+            document.getElementById('avg-rating').textContent = avgRating;
+            document.getElementById('top-genre').textContent = topGenre;
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', (e) => {
+            performSearch(e.target.value);
         });
+
+        sortSelect.addEventListener('change', (e) => {
+            sortAlbums(e.target.value);
+        });
+
+        shuffleBtn.addEventListener('click', shuffleAlbums);
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'f':
+                        e.preventDefault();
+                        searchInput.focus();
+                        break;
+                    case 'd':
+                        e.preventDefault();
+                        toggleTheme();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        shuffleAlbums();
+                        break;
+                }
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            currentAlbums.sort((a, b) => a.title.localeCompare(b.title));
+            originalOrder = [...currentAlbums];
+            renderAlbums();
+        });
+
+        // Add CSS for line clamping
+        const style = document.createElement('style');
+        style.textContent = `
+            .line-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 
